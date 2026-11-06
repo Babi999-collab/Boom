@@ -26,7 +26,7 @@ app.get("/user",(req,res)=>{
     res.status(200).json(database);
 })
  app.get("/user/:id",(req,res)=>{
-    const user=database.find(user=>user.id==req.params.id);
+    const user=database.find(user=>user.id===Number.parseInt(req.params.id));
     if(!user){
        return res.status(404).json({message:"user not found"});
     }
@@ -37,7 +37,16 @@ app.post("/user",(req,res)=>{
     database.push(body);
     res.status(201).json({message:`user created successfully`});
 });
- 
+ app.delete("/user/:id",(req,res)=>{
+    const id=Number.parseInt(req.params.id);
+
+    const user=database.find(user=>user.id===id);
+    if(!user){
+        return res.status(404).json({message:`There is no user with id ${id}`});
+    }
+    const database=database.filter(user=>user.id!==id);
+    res.status(202).send();
+});
 app.listen(3000,()=>{
     console.log("server is running on port 3000");
     });
