@@ -25,7 +25,14 @@ app.use(express.json());
 app.get("/user",(req,res)=>{
     res.status(200).json(database);
 })
- 
+ app.get("/user/:id",(req,res)=>{
+    const user=database.find(user=>user.id===req.params.id);
+    if(!user){
+        res.status(404).json({message:"user not found"});
+    }
+    res.status(200).json(user);
+});
+
 app.listen(3000,()=>{
     console.log("server is running on port 3000");
     });
