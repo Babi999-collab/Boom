@@ -26,13 +26,18 @@ app.get("/user",(req,res)=>{
     res.status(200).json(database);
 })
  app.get("/user/:id",(req,res)=>{
-    const user=database.find(user=>user.id===req.params.id);
+    const user=database.find(user=>user.id==req.params.id);
     if(!user){
-        res.status(404).json({message:"user not found"});
+       return res.status(404).json({message:"user not found"});
     }
     res.status(200).json(user);
 });
-
+app.post("/user",(req,res)=>{
+    const body=req.body;
+    database.push(body);
+    res.status(201).json({message:`user created successfully`});
+});
+ 
 app.listen(3000,()=>{
     console.log("server is running on port 3000");
     });
