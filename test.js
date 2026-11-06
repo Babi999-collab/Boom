@@ -1,6 +1,6 @@
 const express=require('express');
 
-const database=[
+let database=[
     {
         name:"Kebede",
         id:1,
@@ -32,21 +32,34 @@ app.get("/user",(req,res)=>{
     }
     res.status(200).json(user);
 });
+
 app.post("/user",(req,res)=>{
     const body=req.body;
     database.push(body);
     res.status(201).json({message:`user created successfully`});
 });
+
  app.delete("/user/:id",(req,res)=>{
     const id=Number.parseInt(req.params.id);
-
     const user=database.find(user=>user.id===id);
     if(!user){
         return res.status(404).json({message:`There is no user with id ${id}`});
     }
-    const database=database.filter(user=>user.id!==id);
+    database=database.filter(user=>user.id!==id);
     res.status(202).send();
 });
+app.put("/user/:id",(req,res)=>{
+    const id=Number.parseInt(req.params.id);
+    const body=req.body;
+    const user=database.find(user=>user.id===id);
+    if(!user){
+        return res.status(404).json({message:`There is no user with id ${id}`});
+    }
+    const users=database.filter(user=>user.id!==id);
+    users.push(body);
+    database=users;
+    res.status(200).json({message:`user updated successfully`});
+})
 app.listen(3000,()=>{
     console.log("server is running on port 3000");
     });
